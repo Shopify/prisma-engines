@@ -163,7 +163,7 @@ services:
     tmpfs: /var/lib/mysql
 
   mysql-8-0:
-    image: mysql:8.0.28
+    image: mysql:8.0.34@sha256:f0e71f077bb27fe17b1b9551f75d1b35ad4dfe3a33c82412acf19684790f3a30
     command: mysqld
     restart: always
     platform: linux/x86_64
