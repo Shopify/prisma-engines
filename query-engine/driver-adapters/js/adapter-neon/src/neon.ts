@@ -65,9 +65,11 @@ class NeonWsQueryable<ClientT extends neon.Pool | neon.PoolClient> extends NeonQ
           error: {
             kind: 'PostgresError',
             code: e.code,
+            severity: e.severity,
             message: e.message,
             detail: e.detail,
-            column: e.column
+            column: e.column,
+            hint: e.hint
           } 
         }
       }
