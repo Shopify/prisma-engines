@@ -20,7 +20,7 @@ export async function smokeTestLibquery(db: ErrorCapturingDriverAdapter, prismaS
   await test.testCreateAndDeleteChildParent()
   await test.testTransaction()
   await test.testRawError()
-
+  await test.testExpectedError()
   // Note: calling `engine.disconnect` won't actually close the database connection.
   console.log('[nodejs] disconnecting...')
   await engine.disconnect('trace')
@@ -434,6 +434,27 @@ class SmokeTest {
       console.log('[nodejs] caught expected error', error)
     }
 
+  }
+
+  async testExpectedError() {
+    const result = await this.doQuery({
+      modelName: 'Unique',
+      action: 'createMany',
+      query: {
+        arguments: {
+          data: [
+            { email: 'duplicate@example.com'},
+            { email: 'duplicate@example.com'},
+          ]
+        },
+        selection: {
+          $scalars: true
+        }
+      }
+    })
+
+    console.log('[nodejs] error result', JSON.stringify(result, null, 2))
+   
   }
 
   private async doQuery(query: JsonQuery, tx_id?: string) {
