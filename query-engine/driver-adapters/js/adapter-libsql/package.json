@@ -21,7 +21,7 @@
     "@jkomyno/prisma-driver-adapter-utils": "workspace:*"
   },
   "devDependencies": {
-    "@libsql/client": "github:libsql/libsql-client-ts"
+    "@libsql/client": "github:libsql/libsql-client-ts#column-introspection"
   },
   "peerDependencies": {
     "@libsql/client": "^0.3.4"
