@@ -419,6 +419,7 @@ impl Mysql {
         })
         .await
     }
+}
 
 impl_default_TransactionCapable!(Mysql);
 
