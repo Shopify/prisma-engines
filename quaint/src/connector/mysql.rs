@@ -322,7 +322,7 @@ impl MysqlUrl {
 
     pub(crate) fn to_opts_builder(&self) -> my::OptsBuilder {
         let mut config = my::OptsBuilder::default()
-            .stmt_cache_size(Some(0))
+            .stmt_cache_size(Some(10))
             .user(Some(self.username()))
             .pass(self.password())
             .db_name(Some(self.dbname()));
