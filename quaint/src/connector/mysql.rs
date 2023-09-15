@@ -406,30 +406,22 @@ impl Mysql {
         F: Future<Output = crate::Result<T>>,
         U: Fn(my::Statement) -> F,
     {
-        if self.url.statement_cache_size() == 0 {
-            self.perform_io(|| async move {
-                let stmt = {
-                    let mut conn = self.conn.lock().await;
-                    conn.prep(sql).await?
-                };
+        self.perform_io(|| async move {
+            let stmt = {
+                let mut conn = self.conn.lock().await;
+                conn.prep(sql).await?
+            };
 
-                let res = op(stmt.clone()).await;
+            let res = op(stmt.clone()).await;
 
-                {
-                    let mut conn = self.conn.lock().await;
-                    conn.close(stmt).await?;
-                }
+            {
+                let mut conn = self.conn.lock().await;
+                conn.close(stmt).await?;
+            }
 
-                res
-            })
-            .await
-        } else {
-            self.perform_io(|| async move {
-                let stmt = self.fetch_cached(sql).await?;
-                op(stmt).await
-            })
-            .await
-        }
+            res
+        })
+        .await
     }
 
     async fn fetch_cached(&self, sql: &str) -> crate::Result<my::Statement> {
